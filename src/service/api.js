@@ -1,7 +1,5 @@
 import axios from "axios";
 
-import axios from "axios";
-
 const AUTH_TOKEN =
   "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJiN2I4NjRhN2MxZDFlNWY0NjljNzEzNDFhZWM1MjFmMiIsInN1YiI6IjY2NDA3MzFkYTAxMGE3NjBmN2ZmMmQzMSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.ZKuR2fHB2LAU0XVwRpTFPXJTlleJBov9pwMrLRPp5bw";
 
