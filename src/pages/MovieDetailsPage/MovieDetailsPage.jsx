@@ -7,9 +7,10 @@ import {
 } from "react-router-dom";
 import { fetchMoviesById } from "../../service/api";
 import { useEffect, useRef, useState } from "react";
-import { Blocks } from "react-loader-spinner";
+import { DNA } from "react-loader-spinner";
 import clsx from "clsx";
 import css from "./MovieDetailsPage.module.css";
+import NotFoundPage from "../NotFoundPage/NotFoundPage";
 
 const buildLinkClass = ({ isActive }) => {
   return clsx(css.link, isActive && css.active);
@@ -17,61 +18,73 @@ const buildLinkClass = ({ isActive }) => {
 const MovieDetailsPage = () => {
   const navigate = useNavigate();
   const { movieId } = useParams();
-  const [todo, setTodo] = useState("");
+  const [films, setFilms] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
   const photo = "https://image.tmdb.org/t/p/w500/";
   const location = useLocation();
   const locationRef = useRef(location.state || "/");
 
   useEffect(() => {
-    const getTodo = async () => {
-      const data = await fetchMoviesById(movieId);
-      setTodo(data);
-    };
+    const getFilms = async () => {
+      try {
+        setFilms([]);
 
-    getTodo();
+        setError(false);
+
+        setLoading(true);
+
+        const data = await fetchMoviesById(movieId);
+        setFilms(data);
+      } catch (error) {
+        setError(true);
+      } finally {
+        setLoading(false);
+      }
+    };
+    getFilms();
   }, [movieId]);
 
   return (
     <div>
-      {!todo ? (
-        <>
-          <Blocks
-            height="80"
-            width="80"
-            color="#4fa94d"
-            ariaLabel="blocks-loading"
-            wrapperStyle={{}}
-            wrapperClass="blocks-wrapper"
-            visible={true}
-          />
-        </>
+      {error && <NotFoundPage />}
+      {loading ? (
+        <DNA
+          visible={true}
+          height="80"
+          width="80"
+          ariaLabel="dna-loading"
+          wrapperStyle={{}}
+          wrapperClass="dna-wrapper"
+        />
       ) : (
-        <>
-          <div>
+        <div className={css.bigContainer}>
+          <div className={css.thumb}>
             <button type="button" onClick={() => navigate(locationRef.current)}>
               Go back
             </button>
-          </div>
 
-          <img
-            src={
-              todo.poster_path === null
-                ? "https://okdiario.com/img/2020/02/26/series-netflix-top-10-1-1.jpg"
-                : `${photo}${todo.poster_path}`
-            }
-            alt="ok"
-            width={250}
-            height={330}
-          />
-          <h2>{todo.original_title}</h2>
-          <p>User score: {Math.ceil(todo.vote_average * 10)}%</p>
-          <p>{todo.overview}</p>
-          <ul>
-            {todo.genres.map((item) => (
-              <li key={item.id}>{item.name} </li>
-            ))}
-          </ul>
-        </>
+            <img
+              src={
+                films.poster_path === null
+                  ? "https://okdiario.com/img/2020/02/26/series-netflix-top-10-1-1.jpg"
+                  : `${photo}${films.poster_path}`
+              }
+              alt="ok"
+              width={250}
+              height={330}
+            />
+          </div>
+          <div className={css.infoContainer}>
+            <h2>{films.original_title}</h2>
+            <p>User score: {Math.round(films.vote_average * 10)}%</p>
+            <p>{films.overview}</p>
+            <ul>
+              {films.length !== 0 &&
+                films.genres.map((item) => <li key={item.id}>{item.name} </li>)}
+            </ul>
+          </div>
+        </div>
       )}
       <h3>Additional information</h3>
       <ul>
@@ -81,7 +94,7 @@ const MovieDetailsPage = () => {
             state={location}
             className={(isActive) => buildLinkClass(isActive)}
           >
-            Cast{" "}
+            Cast
           </NavLink>
         </li>
         <li>
@@ -90,7 +103,7 @@ const MovieDetailsPage = () => {
             state={location}
             className={(isActive) => buildLinkClass(isActive)}
           >
-            Reviews{" "}
+            Reviews
           </NavLink>
         </li>
       </ul>

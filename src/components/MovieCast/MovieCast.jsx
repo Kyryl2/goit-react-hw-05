@@ -1,44 +1,56 @@
 import { useEffect, useState } from "react";
 import { fetchCreditsById } from "../../service/api";
 import { useParams } from "react-router-dom";
-import { BiFontSize } from "react-icons/bi";
 
+import { DNA } from "react-loader-spinner";
+import css from "./Moviecast.module.css";
 const MovieCast = () => {
   const { movieId } = useParams();
-  const photo = "https://image.tmdb.org/t/p/w500/";
 
-  const [todo, setTodo] = useState([]);
+  const photo = "https://image.tmdb.org/t/p/w500/";
+  const [loading, setLoading] = useState(false);
+  const [cost, setCost] = useState([]);
+  const [error, setError] = useState(false);
   useEffect(() => {
     const fetchReviews = async () => {
-      const data = await fetchCreditsById(movieId);
-      setTodo(data.cast);
+      try {
+        setError(false);
+        setLoading(true);
+        const data = await fetchCreditsById(movieId);
+        setCost(data.cast);
+      } catch (error) {
+        setError(true);
+      } finally {
+        setLoading(false);
+      }
     };
     fetchReviews();
   }, [movieId]);
 
   return (
     <>
-      {!todo && <p>Downoload</p>}
+      {!error && loading && (
+        <DNA
+          visible={true}
+          height="80"
+          width="80"
+          ariaLabel="dna-loading"
+          wrapperStyle={{}}
+          wrapperClass="dna-wrapper"
+        />
+      )}
 
-      {todo.length === 0 ? (
+      {cost.length === 0 ? (
         <>
           <p>No casts yet</p>
         </>
       ) : (
         <>
-          <ul
-            style={{
-              width: 1000,
-              flexWrap: "wrap",
-              display: "flex",
-              flexDirection: "row",
-              gap: 20,
-            }}
-          >
-            {todo.map((item) => (
+          <ul className={css.ul}>
+            {cost.map((item) => (
               <li key={item.id}>
-                <h3 style={{ fontSize: 13, fontWeight: 500 }}>{item.name}</h3>
-                <p>{item.character}</p>
+                <h3 className={css.header}>{item.name}</h3>
+                <p className={css.text}>{item.character}</p>
                 <img
                   src={
                     item.profile_path === null

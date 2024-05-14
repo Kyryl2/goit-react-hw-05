@@ -1,33 +1,45 @@
 import { useEffect, useState } from "react";
 import MovieList from "../../components/MovieList/MovieList";
 import { fetchTrendMovies } from "../../service/api";
-import { Blocks } from "react-loader-spinner";
+import { DNA } from "react-loader-spinner";
 
 const HomePage = () => {
   const [movies, setMovies] = useState([]);
+  const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const getTrendMovies = async () => {
-      const data = await fetchTrendMovies();
+      try {
+        setMovies([]);
 
-      setMovies(data);
+        setError(false);
+
+        setLoading(true);
+
+        const data = await fetchTrendMovies();
+        setMovies(data);
+      } catch (error) {
+        setError(true);
+      } finally {
+        setLoading(false);
+      }
     };
     getTrendMovies();
   }, []);
   return (
     <>
-      {!movies && (
-        <Blocks
+      {loading && (
+        <DNA
+          visible={true}
           height="80"
           width="80"
-          color="#4fa94d"
-          ariaLabel="blocks-loading"
+          ariaLabel="dna-loading"
           wrapperStyle={{}}
-          wrapperClass="blocks-wrapper"
-          visible={true}
+          wrapperClass="dna-wrapper"
         />
       )}
-      {movies.length > 0 && (
+      {!error && movies.length > 0 && (
         <>
           <h1>Trending today</h1>
           <MovieList movies={movies} />

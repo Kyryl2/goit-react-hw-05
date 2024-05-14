@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import MovieList from "../../components/MovieList/MovieList";
 import { useSearchParams } from "react-router-dom";
 import { fetchMoviesByQuery } from "../../service/api";
-import { Blocks } from "react-loader-spinner";
+import { DNA } from "react-loader-spinner";
 import { ErrorMessage } from "formik";
 
 const MoviesPage = () => {
@@ -14,7 +14,7 @@ const MoviesPage = () => {
   const film = searchParams.get("query");
 
   useEffect(() => {
-    async function fetchUser() {
+    async function fetchMovies() {
       if (film === "") return;
       try {
         setFilms([]);
@@ -32,13 +32,13 @@ const MoviesPage = () => {
       }
     }
 
-    fetchUser();
+    fetchMovies();
   }, [film]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const form = e.currentTarget;
-    setSearchParams({ query: form.elements.film.value });
+    setSearchParams({ query: form.elements.film.value.trim() });
     setRequest(true);
     form.reset();
   };
@@ -50,18 +50,17 @@ const MoviesPage = () => {
         <button type="submit">search</button>
       </form>
       {isLoading && (
-        <Blocks
+        <DNA
+          visible={true}
           height="80"
           width="80"
-          color="#4fa94d"
-          ariaLabel="blocks-loading"
+          ariaLabel="dna-loading"
           wrapperStyle={{}}
-          wrapperClass="blocks-wrapper"
-          visible={true}
+          wrapperClass="dna-wrapper"
         />
       )}
       {request && films.length === 0 && <h1>Nothing here</h1>}
-      {films.length !== 0 && <MovieList movies={films} />}
+      {films.length > 0 && <MovieList movies={films} />}
       {isError && <ErrorMessage />}
     </>
   );

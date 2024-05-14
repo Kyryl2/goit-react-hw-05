@@ -1,22 +1,42 @@
 import { useEffect, useState } from "react";
 import { fetchReviewsById } from "../../service/api";
 import { useParams } from "react-router-dom";
+import { DNA } from "react-loader-spinner";
 
 const MovieReviews = () => {
   const { movieId } = useParams();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
 
   const [info, setInfo] = useState([]);
   useEffect(() => {
     const fetchReviews = async () => {
-      const data = await fetchReviewsById(movieId);
-      setInfo(data);
+      try {
+        setError(false);
+        setLoading(true);
+        const data = await fetchReviewsById(movieId);
+        setInfo(data);
+      } catch (error) {
+        setError(true);
+      } finally {
+        setLoading(false);
+      }
     };
     fetchReviews();
   }, [movieId]);
 
   return (
     <>
-      {!info && <p>Downoload</p>}
+      {loading && (
+        <DNA
+          visible={true}
+          height="80"
+          width="80"
+          ariaLabel="dna-loading"
+          wrapperStyle={{}}
+          wrapperClass="dna-wrapper"
+        />
+      )}
 
       {info.length === 0 ? (
         <>

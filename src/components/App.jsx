@@ -7,6 +7,7 @@ import MovieCast from "./MovieCast/MovieCast";
 import { Suspense } from "react";
 
 import { easyLazy } from "../service/easylazy";
+import { DNA } from "react-loader-spinner";
 
 const HomePage = easyLazy("HomePage");
 const MoviesPage = easyLazy("MoviesPage");
@@ -16,8 +17,21 @@ const NotFoundPage = easyLazy("NotFoundPage");
 const App = () => {
   return (
     <div>
-      <Suspense fallback={<div>Loading...</div>}>
-        <Navigation />
+      <Navigation />
+      <Suspense
+        fallback={
+          <div>
+            <DNA
+              visible={true}
+              height="80"
+              width="80"
+              ariaLabel="dna-loading"
+              wrapperStyle={{}}
+              wrapperClass="dna-wrapper"
+            />
+          </div>
+        }
+      >
         <Routes>
           <Route path="/" element={<HomePage />} />
 
