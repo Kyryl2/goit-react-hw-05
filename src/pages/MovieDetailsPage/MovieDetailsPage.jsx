@@ -63,17 +63,18 @@ const MovieDetailsPage = () => {
             <button type="button" onClick={() => navigate(locationRef.current)}>
               Go back
             </button>
-
-            <img
-              src={
-                films.poster_path === null
-                  ? "https://okdiario.com/img/2020/02/26/series-netflix-top-10-1-1.jpg"
-                  : `${photo}${films.poster_path}`
-              }
-              alt="ok"
-              width={250}
-              height={330}
-            />
+            <div className={css.overlay}>
+              <img
+                src={
+                  films.poster_path === null
+                    ? "https://okdiario.com/img/2020/02/26/series-netflix-top-10-1-1.jpg"
+                    : `${photo}${films.poster_path}`
+                }
+                alt="ok"
+                width={350}
+                height={430}
+              />
+            </div>
           </div>
           <div className={css.infoContainer}>
             <h2>{films.original_title}</h2>

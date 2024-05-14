@@ -1,4 +1,7 @@
 body {
-  background: url("https://wallpapercave.com/wp/wp9081316.jpg");
+  padding: 100px;
+  background: #111111;
   background-size: cover;
+  color: rgb(207, 204, 204);
+  font-family: "Montserrat";
 }
