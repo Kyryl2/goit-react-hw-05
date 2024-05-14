@@ -2,18 +2,33 @@ import { useEffect, useState } from "react";
 import MovieList from "../../components/MovieList/MovieList";
 import { useSearchParams } from "react-router-dom";
 import { fetchMoviesByQuery } from "../../service/api";
+import { Blocks } from "react-loader-spinner";
+import { ErrorMessage } from "formik";
 
 const MoviesPage = () => {
-  const [films, setFilms] = useState(null);
+  const [films, setFilms] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const film = searchParams.get("query");
 
   useEffect(() => {
-    if (film === "") return;
-
     async function fetchUser() {
-      const films = await fetchMoviesByQuery(film);
-      setFilms(films);
+      if (film === "") return;
+      try {
+        setFilms([]);
+
+        setIsError(false);
+
+        setIsLoading(true);
+
+        const films = await fetchMoviesByQuery(film);
+        setFilms(films);
+      } catch (error) {
+        setIsError(true);
+      } finally {
+        setIsLoading(false);
+      }
     }
 
     fetchUser();
@@ -32,7 +47,20 @@ const MoviesPage = () => {
         <input type="text" name="film" placeholder="search film" />
         <button type="submit">search</button>
       </form>
-      {films && <MovieList movies={films} />}
+      {isLoading && (
+        <Blocks
+          height="80"
+          width="80"
+          color="#4fa94d"
+          ariaLabel="blocks-loading"
+          wrapperStyle={{}}
+          wrapperClass="blocks-wrapper"
+          visible={true}
+        />
+      )}
+      {films.length === 0 && <h1>Nothing here</h1>}
+      {films.length !== 0 && <MovieList movies={films} />}
+      {isError && <ErrorMessage />}
     </>
   );
 };

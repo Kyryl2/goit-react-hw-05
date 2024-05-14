@@ -7,12 +7,11 @@ const MovieCast = () => {
   const { movieId } = useParams();
   const photo = "https://image.tmdb.org/t/p/w500/";
 
-  const [todo, setTodo] = useState("");
+  const [todo, setTodo] = useState([]);
   useEffect(() => {
     const fetchReviews = async () => {
       const data = await fetchCreditsById(movieId);
       setTodo(data.cast);
-      console.log(data.cast);
     };
     fetchReviews();
   }, [movieId]);

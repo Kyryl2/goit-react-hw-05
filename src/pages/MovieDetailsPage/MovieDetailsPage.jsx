@@ -1,5 +1,5 @@
 import {
-  Link,
+  NavLink,
   Outlet,
   useLocation,
   useNavigate,
@@ -7,21 +7,25 @@ import {
 } from "react-router-dom";
 import { fetchMoviesById } from "../../service/api";
 import { useEffect, useRef, useState } from "react";
+import { Blocks } from "react-loader-spinner";
+import clsx from "clsx";
+import css from "./MovieDetailsPage.module.css";
 
+const buildLinkClass = ({ isActive }) => {
+  return clsx(css.link, isActive && css.active);
+};
 const MovieDetailsPage = () => {
   const navigate = useNavigate();
   const { movieId } = useParams();
   const [todo, setTodo] = useState("");
   const photo = "https://image.tmdb.org/t/p/w500/";
   const location = useLocation();
-  // const locationRef = useRef(location.state || "/");
-  const backLinkHref = location.state ?? "/";
+  const locationRef = useRef(location.state || "/");
 
   useEffect(() => {
     const getTodo = async () => {
       const data = await fetchMoviesById(movieId);
       setTodo(data);
-      console.log(data);
     };
 
     getTodo();
@@ -30,12 +34,21 @@ const MovieDetailsPage = () => {
   return (
     <div>
       {!todo ? (
-        <></>
+        <>
+          <Blocks
+            height="80"
+            width="80"
+            color="#4fa94d"
+            ariaLabel="blocks-loading"
+            wrapperStyle={{}}
+            wrapperClass="blocks-wrapper"
+            visible={true}
+          />
+        </>
       ) : (
         <>
           <div>
-            {" "}
-            <button type="button" onClick={() => navigate(backLinkHref)}>
+            <button type="button" onClick={() => navigate(locationRef.current)}>
               Go back
             </button>
           </div>
@@ -63,14 +76,22 @@ const MovieDetailsPage = () => {
       <h3>Additional information</h3>
       <ul>
         <li>
-          <Link to={`/movies/${movieId}/cast`} state={location}>
+          <NavLink
+            to={`/movies/${movieId}/cast`}
+            state={location}
+            className={(isActive) => buildLinkClass(isActive)}
+          >
             Cast{" "}
-          </Link>
+          </NavLink>
         </li>
         <li>
-          <Link to={`/movies/${movieId}/reviews`} state={location}>
+          <NavLink
+            to={`/movies/${movieId}/reviews`}
+            state={location}
+            className={(isActive) => buildLinkClass(isActive)}
+          >
             Reviews{" "}
-          </Link>
+          </NavLink>
         </li>
       </ul>
 

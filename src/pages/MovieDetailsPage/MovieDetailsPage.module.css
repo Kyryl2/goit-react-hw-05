@@ -1,0 +1,14 @@
+.link {
+  color: blue;
+  margin: 10px;
+  font-size: 25px;
+  font-weight: 800;
+  text-decoration: none;
+  &:hover {
+    color: rgb(0, 255, 34);
+  }
+}
+
+.active {
+  color: red;
+}
