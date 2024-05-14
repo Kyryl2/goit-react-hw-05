@@ -9,12 +9,12 @@
   color: black;
 }
 .button {
-  background-color: blue;
+  background-color: #5d6fed;
   height: 36px;
   width: 100px;
   border-radius: 10px;
   color: rgb(255, 255, 255);
   &:hover {
-    background-color: rgb(118, 118, 241);
+    background-color: rgb(9, 52, 245);
   }
 }
