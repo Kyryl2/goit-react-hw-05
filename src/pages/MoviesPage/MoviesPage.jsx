@@ -8,6 +8,7 @@ import { ErrorMessage } from "formik";
 const MoviesPage = () => {
   const [films, setFilms] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [request, setRequest] = useState(false);
   const [isError, setIsError] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const film = searchParams.get("query");
@@ -38,6 +39,7 @@ const MoviesPage = () => {
     e.preventDefault();
     const form = e.currentTarget;
     setSearchParams({ query: form.elements.film.value });
+    setRequest(true);
     form.reset();
   };
 
@@ -58,7 +60,7 @@ const MoviesPage = () => {
           visible={true}
         />
       )}
-      {films.length === 0 && <h1>Nothing here</h1>}
+      {request && films.length === 0 && <h1>Nothing here</h1>}
       {films.length !== 0 && <MovieList movies={films} />}
       {isError && <ErrorMessage />}
     </>
