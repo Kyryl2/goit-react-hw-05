@@ -4,7 +4,7 @@ import { useSearchParams } from "react-router-dom";
 import { fetchMoviesByQuery } from "../../service/api";
 import { DNA } from "react-loader-spinner";
 import { ErrorMessage } from "formik";
-
+import css from "./MoviePage.module.css";
 const MoviesPage = () => {
   const [films, setFilms] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -45,9 +45,16 @@ const MoviesPage = () => {
 
   return (
     <>
-      <form onSubmit={handleSubmit}>
-        <input type="text" name="film" placeholder="search film" />
-        <button type="submit">search</button>
+      <form onSubmit={handleSubmit} className={css.form}>
+        <input
+          type="text"
+          name="film"
+          placeholder="search film"
+          className={css.input}
+        />
+        <button type="submit" className={css.button}>
+          search
+        </button>
       </form>
       {isLoading && (
         <DNA

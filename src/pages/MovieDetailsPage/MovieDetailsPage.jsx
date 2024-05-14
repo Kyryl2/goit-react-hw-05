@@ -78,9 +78,11 @@ const MovieDetailsPage = () => {
           </div>
           <div className={css.infoContainer}>
             <h2>{films.original_title}</h2>
-            <p>User score: {Math.round(films.vote_average * 10)}%</p>
+            <p className={css.text}>
+              User score: {Math.round(films.vote_average * 10)}%
+            </p>
             <p>{films.overview}</p>
-            <ul>
+            <ul className={css.ul}>
               {films.length !== 0 &&
                 films.genres.map((item) => <li key={item.id}>{item.name} </li>)}
             </ul>
