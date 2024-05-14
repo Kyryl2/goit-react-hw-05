@@ -6,8 +6,8 @@ import MovieReviews from "./MovieReviews/MovieReviews";
 import MovieCast from "./MovieCast/MovieCast";
 import { Suspense } from "react";
 
-import { easyLazy } from "../service/easylazy";
 import { DNA } from "react-loader-spinner";
+import { easyLazy } from "../service/easylazy";
 
 const HomePage = easyLazy("HomePage");
 const MoviesPage = easyLazy("MoviesPage");
